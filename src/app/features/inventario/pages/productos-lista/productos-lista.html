@@ -1,0 +1,75 @@
+<div class="container py-4">
+  <h2 class="h3 mb-3 d-flex align-items-center">
+    Inventario
+    <a routerLink="/dashboard" class="btn btn-light btn-sm ml-3">← Volver</a>
+    <button *ngIf="isAdmin()" class="btn btn-primary btn-sm ml-auto" (click)="add()">
+      + Nuevo producto
+    </button>
+  </h2>
+
+  <table class="table table-sm align-middle">
+    <thead>
+      <tr>
+        <th style="width:56px">#</th>
+        <th>Producto</th>
+        <th style="width:160px">Stock</th>
+        <th style="width:120px">Mínimo</th>
+        <th *ngIf="isAdmin()" style="width:220px">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let p of productos(); let i = index" [class.table-danger]="isLow(p)">
+        <td>{{ i + 1 }}</td>
+
+        <!-- Nombre con edición inline -->
+        <td>
+          <ng-container *ngIf="editingId() !== p.id; else editNameTpl">
+            {{ p.nombre }}
+          </ng-container>
+          <ng-template #editNameTpl>
+            <input class="form-control form-control-sm"
+                   [ngModel]="draftName()"
+                   (ngModelChange)="draftName.set($event)"
+                   maxlength="80" />
+          </ng-template>
+        </td>
+
+        <!-- Stock: edición directa -->
+        <td>
+          <input type="number"
+                 class="form-control form-control-sm text-right"
+                 [disabled]="!isAdmin()"
+                 [ngModel]="p.stock"
+                 min="0"
+                 (ngModelChange)="setStock(p, $event)" />
+        </td>
+
+        <!-- Mínimo (solo lectura en esta vista; puedes habilitar si quieres) -->
+        <td>{{ p.min ?? 0 }}</td>
+
+        <!-- Acciones admin -->
+        <td *ngIf="isAdmin()">
+          <ng-container *ngIf="editingId() !== p.id; else actionsEdit">
+            <button class="btn btn-outline-secondary btn-sm mr-2" (click)="startRename(p)">
+              Renombrar
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="remove(p)">
+              Eliminar
+            </button>
+          </ng-container>
+
+          <ng-template #actionsEdit>
+            <button class="btn btn-primary btn-sm mr-2" (click)="saveRename(p)">Guardar</button>
+            <button class="btn btn-light btn-sm" (click)="cancelRename()">Cancelar</button>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!productos().length" class="text-muted small">
+    No hay productos.
+    <button *ngIf="isAdmin()" class="btn btn-link p-0 align-baseline" (click)="add()">Crear el primero</button>.
+  </div>
+</div>
