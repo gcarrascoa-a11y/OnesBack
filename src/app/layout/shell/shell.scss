@@ -1,2 +1,6 @@
-.content-wrapper { background: #f4f6f9; }
-.navbar-brand { letter-spacing: .3px; }
+/* Shell tweaks */
+.content-wrapper {
+  background: var(--surface);
+  min-height: calc(100vh - 120px);
+}
+.main-footer { padding: 14px 0; }

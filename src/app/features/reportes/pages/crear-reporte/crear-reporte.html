@@ -1,0 +1,41 @@
+<div class="container py-4">
+  <h2 class="h3 mb-3 d-flex align-items-center">
+    Crear reporte
+    <a routerLink="/dashboard" class="btn btn-light btn-sm ml-3">← Volver</a>
+  </h2>
+
+  <div class="card">
+    <div class="card-body">
+      <form (ngSubmit)="generar()">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Desde</label>
+            <input class="form-control" type="date" [(ngModel)]="desde" name="desde">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Hasta</label>
+            <input class="form-control" type="date" [(ngModel)]="hasta" name="hasta">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Formato</label>
+            <select class="form-control" [(ngModel)]="formato" name="formato">
+              <option value="csv">CSV</option>
+              <option value="json">JSON</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary">Generar reporte</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card mt-3" *ngIf="linkDescarga">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <div class="font-weight-bold">Reporte listo</div>
+        <small class="text-muted">{{ nombreArchivo }}</small>
+      </div>
+      <a class="btn btn-primary" [href]="linkDescarga" [download]="nombreArchivo">Descargar</a>
+    </div>
+  </div>
+</div>

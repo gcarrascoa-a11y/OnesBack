@@ -6,9 +6,16 @@
       <li class="nav-item"><a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Inicio</a></li>
       <li class="nav-item"><a routerLink="/inventario" routerLinkActive="active" class="nav-link">Inventario</a></li>
       <li class="nav-item"><a routerLink="/usuarios"   routerLinkActive="active" class="nav-link">Usuarios</a></li>
+      <li class="nav-item"><a routerLink="/reportes/crear" routerLinkActive="active" class="nav-link">Reportes</a></li>
     </ul>
 
     <ul class="navbar-nav ml-auto align-items-center" *ngIf="!isAuthRoute()">
+      <li class="nav-item mr-2">
+        <button class="theme-toggle btn btn-sm" (click)="toggleTheme()" [attr.aria-label]="theme() === 'dark' ? 'Cambiar a claro' : 'Cambiar a oscuro'">
+          <ng-container *ngIf="theme() === 'dark'; else sunTpl">🌙</ng-container>
+          <ng-template #sunTpl>☀️</ng-template>
+        </button>
+      </li>
       <li class="nav-item mr-2">
         <span class="badge badge-info p-2">Rol: {{ auth.currentRole() || '—' }}</span>
       </li>
