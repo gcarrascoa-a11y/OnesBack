@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
+// Tipo para mayor claridad
+type Theme = 'light' | 'dark';
+
 @Component({
   selector: 'app-shell',
   standalone: true,
@@ -11,26 +14,46 @@ import { AuthService } from '../../core/services/auth';
   styleUrls: ['./shell.scss'],
 })
 export class ShellComponent {
-  theme = signal<'light' | 'dark'>('light');
+  // Inicialización usando Signals
+  theme = signal<Theme>('light');
   readonly currentYear = new Date().getFullYear();
 
   constructor(public auth: AuthService) {
-    // Init theme
-    const stored = (localStorage.getItem('theme') as 'light'|'dark'|null);
+    // 1. Inicializar el tema desde localStorage o preferencias del sistema
+    const stored = (localStorage.getItem('theme') as Theme | null);
     const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-    this.theme.set(stored ?? (prefersDark ? 'dark' : 'light'));
-    document.documentElement.setAttribute('data-theme', this.theme());
+    
+    // Establece el valor inicial de la señal
+    const initialTheme = stored ?? (prefersDark ? 'dark' : 'light');
+    this.theme.set(initialTheme);
+    
+    // 2. Aplicar la clase al inicializar, utilizando el mismo patrón que la lógica de toggle
+    this.applyThemeClass(initialTheme);
   }
 
   isAuthRoute(): boolean {
     return location.pathname.startsWith('/auth/');
   }
 
+  // LÓGICA MODIFICADA PARA QUE FUNCIONE EL MODO NOCHE
   toggleTheme(): void {
     const next = this.theme() === 'dark' ? 'light' : 'dark';
     this.theme.set(next);
-    document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
+
+    // LLAMA A LA FUNCIÓN PARA APLICAR LAS CLASES AL BODY
+    this.applyThemeClass(next);
+  }
+
+  // Función auxiliar para aplicar o remover la clase 'dark-mode'
+  private applyThemeClass(currentTheme: Theme): void {
+    if (currentTheme === 'dark') {
+        // Agrega la clase 'dark-mode' al BODY, donde aplicamos los estilos
+        document.body.classList.add('dark-mode');
+    } else {
+        // Remueve la clase 'dark-mode'
+        document.body.classList.remove('dark-mode');
+    }
   }
 
   logout(): void {

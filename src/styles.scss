@@ -1,185 +1,227 @@
+/* ========================================================================
+   1. VARIABLES DE ESTILO GENERALES PARA ACCESIBILIDAD Y MINIMALISMO
+   ======================================================================== */
 
-/* === Global Theme: Light / Dark with Black brand === */
+// Colores base para un tema de floristería/naturaleza (Modo Claro)
+$color-primario: #3c763d; // Un verde oscuro y suave (para botones y acentos importantes)
+$color-secundario: #d4edda; // Un verde más claro/pastel para fondos de alerta o elementos ligeros
+$color-texto-principal: #343a40; // Gris oscuro para alta legibilidad
+$color-fondo-claro: #f8f9fa; // Gris muy claro para fondos
+$color-fondo-blanco: #ffffff; // Blanco puro
+$color-borde-suave: #ced4da; // Borde muy sutil
 
-/* Light tokens */
-:root{
-  --brand:        #111111;      /* black brand */
-  --brand-600:    #1f2937;      /* dark slate (hover) */
-  --brand-700:    #0b0b0b;
-  --accent:       #0ea5e9;      /* info */
-  --ok:           #16a34a;
-  --warn:         #f59e0b;
-  --danger:       #ef4444;
-  --bg:           #ffffff;
-  --surface:      #f5f7fb;
-  --card:         #ffffff;
-  --muted:        #6b7280;
-  --text:         #0f172a;
-  --shadow:       0 10px 30px rgba(0,0,0,.06);
-  --ring:         0 0 0 3px rgba(0,0,0,.12);
+// Variables para el Modo Oscuro
+$dark-background: #1e2124; // Un fondo oscuro profundo
+$dark-surface: #2b3035; // Color para tarjetas y superficies
+$dark-text: #f8f9fa; // Texto claro
+$dark-border: #495057; // Bordes sutiles en oscuro
+
+// Tipografía y espaciado para mejor accesibilidad (personas mayores)
+$base-font-size: 16px; // Tamaño de fuente base más grande
+$spacing-large: 1.5rem; // Mayor espacio entre elementos
+
+/* ========================================================================
+   2. ESTILOS GLOBALES DEL CUERPO Y TIPOGRAFÍA (Modo Claro)
+   ======================================================================== */
+
+body {
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size: $base-font-size;
+  color: $color-texto-principal;
+  background-color: $color-fondo-claro;
+  line-height: 1.6; // Aumentar la altura de línea para mejorar la lectura
 }
 
-/* Dark tokens */
-:root[data-theme="dark"]{
-  --brand:        #fafafa;      /* text stays white on dark */
-  --brand-600:    #e5e7eb;
-  --brand-700:    #f3f4f6;
-  --accent:       #38bdf8;
-  --ok:           #22c55e;
-  --warn:         #f59e0b;
-  --danger:       #f87171;
-  --bg:           #0b0f19;
-  --surface:      #0f1524;
-  --card:         #0b0f19;
-  --muted:        #9aa3b2;
-  --text:         #e5e7eb;
-  --shadow:       0 10px 30px rgba(0,0,0,.5);
-  --ring:         0 0 0 3px rgba(255,255,255,.12);
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600; // Un poco más de peso para destacar
+  color: $color-texto-principal;
 }
 
-/* Base resets and font (Inter, like Figma capture) */
-html, body {
-  height: 100%;
-  background: var(--surface);
-  color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji';
+// Enlaces
+a {
+  color: $color-primario;
+  &:hover {
+    color: darken($color-primario, 10%);
+  }
 }
 
-a { color: var(--brand); }
-a:hover { color: var(--brand-700); text-decoration: none; }
+/* ========================================================================
+   3. REFINAMIENTO DE ADMINLTE (Modo Claro)
+   ======================================================================== */
 
-.container { max-width: 1160px; }
+// Contenedor principal de contenido para más espacio
+.content-wrapper {
+  padding-top: $spacing-large * 1.5 !important;
+}
 
-/* Navbar */
-.navbar {
-  box-shadow: var(--shadow);
-  background: var(--bg) !important;
+// Navbar y Sidebar (aunque usamos navbar horizontal, estas clases pueden aplicarse)
+.main-sidebar, .main-header {
+  box-shadow: none !important; // Eliminar sombras
+  border-right: 1px solid $color-borde-suave;
 }
-.navbar .navbar-brand {
-  font-weight: 800;
-  letter-spacing: .3px;
-}
-.navbar .nav-link {
-  border-radius: 10px;
-  padding: .5rem .9rem;
-  margin-right: .25rem;
-  transition: .2s ease;
-  color: var(--text);
-}
-.navbar .nav-link.active,
-.navbar .nav-link:hover {
-  background: rgba(0,0,0,.06);
-  color: var(--brand) !important;
-}
-:root[data-theme="dark"] .navbar .nav-link:hover,
-:root[data-theme="dark"] .navbar .nav-link.active { background: rgba(255,255,255,.08); }
 
-/* Theme toggle */
-.theme-toggle {
-  border-radius: 10px;
-  padding: .45rem .6rem;
-  border: 1px solid rgba(0,0,0,.08);
-  background: var(--bg);
-}
-:root[data-theme="dark"] .theme-toggle { border-color: rgba(255,255,255,.12); }
-
-/* Buttons */
+// Botones de acción principales (para accesibilidad)
 .btn-primary {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: #fff;
-}
-.btn-primary:hover,
-.btn-primary:focus {
-  background: var(--brand-600);
-  border-color: var(--brand-600);
-  box-shadow: var(--ring);
-}
-.btn-outline-dark:hover {
-  color: #fff;
-  background: #111827;
+  background-color: $color-primario !important;
+  border-color: $color-primario !important;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  font-size: $base-font-size;
+  &:hover {
+    background-color: darken($color-primario, 10%) !important;
+    border-color: darken($color-primario, 10%) !important;
+  }
 }
 
-/* Badges */
-.badge-info    { background: var(--accent); }
-.badge-success { background: var(--ok); }
-.badge-warning { background: var(--warn); color:#111; }
-.badge-danger  { background: var(--danger); }
+/* ========================================================================
+   4. COMPONENTES PRINCIPALES (Modo Claro)
+   ======================================================================== */
 
-/* Cards + panels */
+// Tarjetas (Card) - Reducción de distracción
 .card {
-  border: 0;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  background: var(--card);
-  color: var(--text);
-}
-.card-header {
-  background: transparent;
-  border-bottom: 1px solid rgba(0,0,0,.06);
-  font-weight: 700;
-}
-.card-footer { background: transparent; border-top: 1px solid rgba(0,0,0,.06); }
-:root[data-theme="dark"] .card-header { border-bottom-color: rgba(255,255,255,.08); }
-:root[data-theme="dark"] .card-footer { border-top-color: rgba(255,255,255,.08); }
+  box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.1); // Sombra más suave
+  border: 1px solid $color-borde-suave;
+  border-radius: 0.5rem; // Bordes ligeramente redondeados
 
-/* KPI chips */
-.fc-kpi {
-  background: var(--bg);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: 18px 20px;
-  position: relative;
-  overflow: hidden;
+  .card-header {
+    border-bottom: 1px solid $color-borde-suave;
+    background-color: $color-fondo-blanco; // Fondo blanco para un aspecto más limpio
+    font-size: $base-font-size * 1.1;
+    font-weight: 600;
+  }
+  .card-body {
+    padding: $spacing-large;
+  }
 }
-.fc-kpi::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(40px 40px at 10% 10%, rgba(0,0,0,.06), transparent 60%),
-    radial-gradient(60px 60px at 90% 20%, rgba(0,0,0,.04), transparent 70%);
-  pointer-events: none;
-}
-:root[data-theme="dark"] .fc-kpi::before {
-  background-image:
-    radial-gradient(40px 40px at 10% 10%, rgba(255,255,255,.06), transparent 60%),
-    radial-gradient(60px 60px at 90% 20%, rgba(255,255,255,.04), transparent 70%);
-}
-.fc-kpi-head { font-weight: 700; color: var(--muted); }
-.fc-kpi-value { font-size: 34px; font-weight: 800; line-height: 1.1; }
-.fc-kpi-bar { margin-top: 4px; font-size: 12px; color: var(--muted); }
 
-/* Table */
-.table { color: var(--text); }
-.table thead th {
-  background: var(--card);
-  border-bottom: 1px solid rgba(0,0,0,.08);
-  color: var(--muted);
-  font-weight: 700;
+// Pequeños cuadros de información (Info Box, Small Box) - Minimalismo
+.small-box, .info-box {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.15); // Sombra sutil
+  .inner {
+    padding: 15px; // Aumentar el espacio interno
+    h3 {
+      font-size: 2.2rem; // Números grandes
+    }
+  }
 }
-.table tbody td { vertical-align: middle; }
-.table-hover tbody tr:hover { background: rgba(0,0,0,.03); }
-:root[data-theme="dark"] .table-hover tbody tr:hover { background: rgba(255,255,255,.05); }
 
-/* Pills used for status (Disponible/Bajo/Agotado) */
-.status-pill {
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+// Tablas - Mejorar la legibilidad de las listas de datos
+.table {
+  font-size: $base-font-size * 0.95;
+  th {
+    font-weight: 600;
+    color: $color-texto-principal;
+    border-bottom: 2px solid $color-borde-suave;
+    padding: 0.75rem; // Más espacio en celdas
+  }
+  td {
+    padding: 0.75rem;
+  }
+  // Alternar colores de fila para facilitar la lectura de datos largos
+  tbody tr:nth-of-type(odd) {
+    background-color: $color-fondo-claro; 
+  }
 }
-.status-ok     { background: rgba(22,163,74,.12); color: #065f46; }
-.status-warn   { background: rgba(245,158,11,.14); color: #92400e; }
-.status-danger { background: rgba(239,68,68,.15); color: #991b1b; }
 
-/* Reveal */
-.reveal { opacity: 0; transform: translateY(8px); animation: rev .5s ease forwards; animation-delay: calc(var(--i,0) * 80ms); }
-@keyframes rev { to { opacity: 1; transform: none; } }
+// Formularios e Inputs
+.form-control, .input-group-text, .custom-select {
+  border-radius: 0.25rem;
+  border-color: $color-borde-suave;
+  padding: 0.5rem 0.75rem;
+  min-height: 42px; // Aumentar la altura para facilitar el clic
+  font-size: $base-font-size * 0.95;
+}
 
-/* Footer */
-.main-footer { background: var(--bg); border-top: 1px solid rgba(0,0,0,.06); }
-:root[data-theme="dark"] .main-footer { border-top-color: rgba(255,255,255,.08); }
+// Eliminar el padding extra del content header
+.content-header {
+  padding: $spacing-large 0 0 !important;
+}
+
+// Reajustar el Breadcrumb
+.breadcrumb-item {
+  font-size: $base-font-size * 0.9;
+}
+
+
+/* ========================================================================
+   6. ESTILOS ESPECÍFICOS PARA EL MODO OSCURO (Dark Mode)
+   ======================================================================== */
+
+// Este bloque se activa cuando ShellComponent.ts añade la clase 'dark-mode' al <body>
+body.dark-mode {
+  // 1. Fondo general
+  background-color: $dark-background !important;
+  color: $dark-text !important;
+
+  // 2. Encabezados y enlaces
+  h1, h2, h3, h4, h5, h6, a {
+    color: $dark-text !important;
+  }
+  a {
+    color: lighten($color-primario, 15%);
+    &:hover {
+      color: $color-primario;
+    }
+  }
+
+  // 3. Barra Superior (Navbar)
+  .main-header.navbar-white, 
+  .navbar {
+    background-color: $dark-surface !important;
+    border-bottom-color: $dark-border !important;
+    // La sombra ayuda a separar el navbar del resto del contenido
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.125), 0 1px 3px rgba(255, 255, 255, 0.2) !important;
+  }
+  .navbar-nav .nav-link {
+    color: #ced4da !important; // Color del texto en el navbar
+  }
+  .navbar-brand {
+    color: $dark-text !important;
+  }
+
+  // 4. Tarjetas (Card) y contenedores
+  .card {
+    background-color: $dark-surface !important;
+    border-color: $dark-border !important;
+    color: $dark-text !important;
+    box-shadow: 0 0 1px rgba(255,255,255,.125), 0 1px 3px rgba(255,255,255,.15) !important;
+  }
+  .card-header {
+    background-color: $dark-surface !important; 
+    border-bottom-color: $dark-border !important;
+  }
+
+  // 5. Cuadros pequeños de información (Small Boxes / Info Boxes)
+  .small-box, .info-box {
+    background-color: lighten($dark-surface, 5%) !important;
+    color: $dark-text !important;
+  }
+
+  // 6. Tablas
+  .table {
+    color: $dark-text !important;
+    th {
+      border-bottom-color: $dark-border !important;
+    }
+    // Asegurar que las filas impares tengan un fondo diferente al fondo del body
+    tbody tr:nth-of-type(odd) {
+      background-color: lighten($dark-surface, 3%) !important; 
+    }
+    tbody tr:nth-of-type(even) {
+      background-color: $dark-surface !important; 
+    }
+  }
+
+  // 7. Formularios e Inputs
+  .form-control, .input-group-text, .custom-select {
+    background-color: lighten($dark-surface, 5%) !important;
+    border-color: $dark-border !important;
+    color: $dark-text !important;
+  }
+  // Colores de texto dentro de inputs
+  .form-control::placeholder {
+      color: #aaa; 
+      opacity: 1; 
+  }
+}

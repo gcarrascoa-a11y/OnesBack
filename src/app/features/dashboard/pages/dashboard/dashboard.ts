@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   time = computed(() =>
     this.now().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   );
+lastUpdateDate: string | number | Date | undefined;
 
   ngOnInit(): void {
     this.load();
