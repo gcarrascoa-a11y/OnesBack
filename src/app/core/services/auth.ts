@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  currentUsername(): string {
+    throw new Error('Method not implemented.');
+  }
   private role = signal<string | null>(null);
 
   constructor(private router: Router) {}

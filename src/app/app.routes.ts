@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { ShellComponent } from './layout/shell/shell';
 import { authGuard } from './core/guards/auth-guard';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   // Login (fuera del shell)
@@ -11,7 +12,7 @@ export const routes: Routes = [
     title: 'Iniciar sesión',
   },
 
-  // App protegida
+  // App protegida por login
   {
     path: '',
     component: ShellComponent,
@@ -60,17 +61,28 @@ export const routes: Routes = [
         title: 'Reportes',
       },
 
+      // USUARIOS (solo admin)
       {
         path: 'usuarios',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/usuarios/pages/usuarios-lista/usuarios-lista')
             .then(m => m.UsuariosListaComponent),
         title: 'Usuarios',
       },
 
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      // Redirección por defecto dentro del shell
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
     ],
   },
 
-  { path: '**', redirectTo: '' },
+  // Cualquier otra ruta → raíz (que a su vez manda a dashboard si está logueado)
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

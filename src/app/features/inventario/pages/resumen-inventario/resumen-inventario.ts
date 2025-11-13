@@ -1,158 +1,96 @@
-// src/app/features/inventario/pages/resumen-inventario/resumen-inventario.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InventarioService, Producto } from '../../../../core/services/inventario';
+
+type Filtro = 'todos' | 'disponibles' | 'bajo' | 'agotados';
 
 @Component({
   selector: 'app-resumen-inventario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './resumen-inventario.html'
+  imports: [CommonModule],
+  templateUrl: './resumen-inventario.html',
+  styleUrls: ['./resumen-inventario.scss'],
 })
-
 export class ResumenInventarioComponent implements OnInit {
+  productos: Producto[] = [];
+  filtro: Filtro = 'disponibles';
 
-  // Lista completa y lista filtrada
-  lista: Producto[] = [];
-  listaFiltrada: Producto[] = [];
-
-  // Filtros
-  filtro: 'todos' | 'disponibles' | 'bajo' | 'agotados' = 'todos';
-  filtroEtiqueta = 'Todos los productos';
-
-  // Stats
-  total = 0;
-  enStock = 0;
-  disponibles = 0;
-  bajos = 0;
-  agotados = 0;
-
-  // Modal / formulario
-  isOpen = false;
-  form!: FormGroup;
-  productoActual: Producto | null = null;
-
-  constructor(
-    private fb: FormBuilder,
-    private inventarioService: InventarioService
-  ) {
-    this.form = this.fb.group({
-      id: [''],
-      nombre: [{ value: '', disabled: false }, [Validators.required]],
-      categoria: [''],
-      stock: [0, [Validators.required, Validators.min(0)]],
-      precio: [0, [Validators.min(0)]],
-      descripcion: ['']
-    });
-  }
+  constructor(private inventario: InventarioService) {}
 
   ngOnInit(): void {
-    // Tu servicio es síncrono
-    this.lista = this.inventarioService.all();
-    this.aplicarFiltro();
-    this.recalcularStats();
+    this.refrescar();
   }
 
-  /** Aplica el filtro actual a la lista */
-  private aplicarFiltro(): void {
+  private refrescar(): void {
+    this.productos = this.inventario.all();
+  }
+
+  // Productos filtrados según el botón seleccionado
+  get productosFiltrados(): Producto[] {
     switch (this.filtro) {
       case 'disponibles':
-        this.listaFiltrada = this.lista.filter(p => p.stock > 0);
-        this.filtroEtiqueta = 'Productos disponibles';
-        break;
+        return this.productos.filter(p => p.stock > 0 && p.stock > (p.min ?? 0));
       case 'bajo':
-        this.listaFiltrada = this.lista.filter(p => p.stock > 0 && p.stock <= p.min);
-        this.filtroEtiqueta = 'Productos con stock bajo';
-        break;
+        return this.productos.filter(p => p.stock > 0 && p.stock <= (p.min ?? 0));
       case 'agotados':
-        this.listaFiltrada = this.lista.filter(p => p.stock <= 0);
-        this.filtroEtiqueta = 'Productos agotados';
-        break;
+        return this.productos.filter(p => p.stock === 0);
+      case 'todos':
       default:
-        this.listaFiltrada = [...this.lista];
-        this.filtroEtiqueta = 'Todos los productos';
-        break;
+        return this.productos;
     }
   }
 
-  /** Recalcula totales para los chips y las estadísticas */
-  private recalcularStats(): void {
-    this.total = this.lista.length;
-    this.enStock = this.lista.filter(p => p.stock > 0).length;
-    this.disponibles = this.enStock;
-    this.agotados = this.lista.filter(p => p.stock <= 0).length;
-    this.bajos = this.lista.filter(p => p.stock > 0 && p.stock <= p.min).length;
+  // Totales para la tarjeta de abajo
+  get totalProductos(): number {
+    return this.productos.length;
   }
 
-  setFiltro(f: 'todos' | 'disponibles' | 'bajo' | 'agotados'): void {
-    this.filtro = f;
-    this.aplicarFiltro();
+  get totalEnStock(): number {
+    return this.productos.filter(p => p.stock > 0).length;
   }
 
-  estado(p: Producto): { cls: string; label: string } {
-    if (p.stock <= 0) {
-      return { cls: 'badge-danger', label: 'Agotado' };
-    }
-    if (p.stock <= p.min) {
-      return { cls: 'badge-warning', label: 'Stock bajo' };
-    }
-    return { cls: 'badge-success', label: 'Disponible' };
+  get totalStockBajo(): number {
+    return this.productos.filter(p => p.stock > 0 && p.stock <= (p.min ?? 0)).length;
   }
 
-  trackById = (_: number, p: Producto) => p.id;
-
-  // ---------- Modal ----------
-
-  openModal(p: Producto): void {
-    this.productoActual = p;
-    this.isOpen = true;
-
-    this.form.reset({
-      id: p.id,
-      nombre: p.nombre,
-      categoria: p.categoria ?? '',
-      stock: p.stock ?? 0,
-      precio: p.precio ?? 0,
-      descripcion: p.descripcion ?? ''
-    });
-
-    // Nombre solo lectura en el modal
-    this.form.get('nombre')?.disable();
+  get totalAgotados(): number {
+    return this.productos.filter(p => p.stock === 0).length;
   }
 
-  closeModal(): void {
-    this.isOpen = false;
-    this.productoActual = null;
-    this.form.enable();
+  cambiarFiltro(filtro: Filtro): void {
+    this.filtro = filtro;
   }
 
-  save(): void {
-    if (!this.form.valid || !this.productoActual) {
+  // === ACCIONES ===
+
+  editarProducto(prod: Producto): void {
+    const nuevoNombre = prompt('Nuevo nombre del producto:', prod.nombre);
+    if (nuevoNombre === null || nuevoNombre.trim() === '') {
       return;
     }
 
-    const raw = this.form.getRawValue() as Partial<Producto>;
-
-    const valores: Producto = {
-      ...this.productoActual,
-      ...raw,
-      id: this.productoActual.id,
-      stock: Number(raw.stock ?? this.productoActual.stock),
-      nombre: this.productoActual.nombre  // no se edita nombre desde el modal
-    };
-
-    // Actualiza la copia local
-    const idx = this.lista.findIndex(p => p.id === valores.id);
-    if (idx >= 0) {
-      this.lista[idx] = valores;
+    const nuevoStockStr = prompt('Nueva cantidad en stock:', String(prod.stock));
+    if (nuevoStockStr === null) {
+      return;
     }
 
-    // Actualiza el stock en el servicio
-    this.inventarioService.setStock(valores.id, valores.stock);
+    const nuevoStock = Number(nuevoStockStr);
+    if (Number.isNaN(nuevoStock) || nuevoStock < 0) {
+      alert('Cantidad inválida.');
+      return;
+    }
 
-    this.aplicarFiltro();
-    this.recalcularStats();
-    this.closeModal();
+    // Usamos los métodos del servicio
+    this.inventario.rename(prod.id, nuevoNombre.trim());
+    this.inventario.setStock(prod.id, nuevoStock);
+    this.refrescar();
+  }
+
+  eliminarProducto(prod: Producto): void {
+    const ok = confirm(`¿Eliminar el producto "${prod.nombre}"?`);
+    if (!ok) return;
+
+    this.inventario.remove(prod.id);
+    this.refrescar();
   }
 }

@@ -2,6 +2,7 @@
   <div class="container">
     <a class="navbar-brand" routerLink="/">FloriCoop</a>
 
+    <!-- Menú izquierdo -->
     <ul class="navbar-nav ml-3" *ngIf="!isAuthRoute()">
       <li class="nav-item">
         <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
@@ -11,7 +12,8 @@
 
       <!-- Inventario eliminado -->
 
-      <li class="nav-item">
+      <!-- Solo los administradores ven este menú -->
+      <li class="nav-item" *ngIf="isAdmin">
         <a routerLink="/usuarios" routerLinkActive="active" class="nav-link">
           <i class="fas fa-users mr-1"></i>Usuarios
         </a>
@@ -24,6 +26,7 @@
       </li>
     </ul>
 
+    <!-- Menú derecho -->
     <ul class="navbar-nav ml-auto align-items-center" *ngIf="!isAuthRoute()">
       <li class="nav-item mr-2">
         <button
@@ -35,9 +38,28 @@
           <ng-template #sunTpl>☀️</ng-template>
         </button>
       </li>
-      <li class="nav-item mr-2">
-        <span class="badge badge-info p-2">Rol: {{ auth.currentRole() || '—' }}</span>
+
+      <!-- Nombre de usuario (si existe) -->
+      <li class="nav-item mr-2" *ngIf="username">
+        <span class="badge badge-light p-2">
+          <i class="fas fa-user mr-1"></i>{{ username }}
+        </span>
       </li>
+
+      <!-- Rol actual -->
+      <li class="nav-item mr-2">
+        <span class="badge badge-info p-2">
+          Rol:
+          {{
+            role === 'admin'
+              ? 'Administrador'
+              : role === 'user'
+                ? 'Usuario'
+                : '—'
+          }}
+        </span>
+      </li>
+
       <li class="nav-item">
         <button class="btn btn-sm btn-outline-dark" (click)="logout()">
           <i class="fas fa-sign-out-alt mr-1"></i>Salir

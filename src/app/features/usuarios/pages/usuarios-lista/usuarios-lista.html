@@ -1,6 +1,110 @@
-<h2>Usuarios</h2>
-<ul>
-  <li *ngFor="let u of usuarios">
-    {{ u.nombre }} <small>({{ u.role }})</small>
-  </li>
-</ul>
+<div class="usuarios-page">
+  <!-- Tarjetas resumen -->
+  <div class="cards-grid">
+    <div class="summary-card">
+      <div class="summary-header">
+        <span class="summary-title">Total Usuarios</span>
+        <span class="summary-icon">
+          <i class="fas fa-users"></i>
+        </span>
+      </div>
+      <div class="summary-number">{{ totalUsuarios }}</div>
+      <div class="summary-subtitle">Usuarios registrados</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-header">
+        <span class="summary-title">Administradores</span>
+        <span class="summary-icon">
+          <i class="fas fa-user-shield"></i>
+        </span>
+      </div>
+      <div class="summary-number">{{ totalAdmins }}</div>
+      <div class="summary-subtitle">Con permisos totales</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-header">
+        <span class="summary-title">Usuarios Normales</span>
+        <span class="summary-icon">
+          <i class="fas fa-user"></i>
+        </span>
+      </div>
+      <div class="summary-number">{{ totalNormales }}</div>
+      <div class="summary-subtitle">Solo lectura</div>
+    </div>
+  </div>
+
+  <!-- Bloque principal -->
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Gestión de Usuarios</h2>
+        <p class="panel-subtitle">
+          Administra los usuarios que tienen acceso al sistema
+        </p>
+      </div>
+      <button class="btn btn-primary" type="button" (click)="onAgregarUsuario()">
+        <i class="fas fa-user-plus"></i>
+        <span>Agregar Usuario</span>
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Nombre Completo</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Fecha Creación</th>
+            <th class="col-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios">
+            <td>{{ u.username }}</td>
+            <td>{{ u.nombreCompleto }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+              <span
+                class="role-badge"
+                [ngClass]="{
+                  'role-admin': u.role === 'admin',
+                  'role-user': u.role === 'user'
+                }"
+              >
+                <i
+                  class="fas"
+                  [ngClass]="{
+                    'fa-shield-alt': u.role === 'admin',
+                    'fa-user': u.role === 'user'
+                  }"
+                ></i>
+                {{ u.role === 'admin' ? 'Administrador' : 'Usuario' }}
+              </span>
+            </td>
+            <td>{{ u.creadoEn }}</td>
+            <td class="col-acciones">
+              <button class="btn btn-ghost" type="button" (click)="onEditar(u)">
+                <i class="fas fa-pen"></i>
+                <span>Editar</span>
+              </button>
+              <button class="btn btn-danger" type="button" (click)="onEliminar(u)">
+                <i class="fas fa-trash-alt"></i>
+                <span>Eliminar</span>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="usuarios.length === 0">
+            <td colspan="6" class="empty-state">
+              No hay usuarios registrados aún.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

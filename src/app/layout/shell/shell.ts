@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
+import { Router } from '@angular/router';
 
 // Tipo para mayor claridad
 type Theme = 'light' | 'dark';
@@ -18,45 +19,56 @@ export class ShellComponent {
   theme = signal<Theme>('light');
   readonly currentYear = new Date().getFullYear();
 
-  constructor(public auth: AuthService) {
+  constructor(
+    public auth: AuthService,   // público para usarlo en la template
+    private router: Router
+  ) {
     // 1. Inicializar el tema desde localStorage o preferencias del sistema
-    const stored = (localStorage.getItem('theme') as Theme | null);
+    const stored = localStorage.getItem('theme') as Theme | null;
     const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    // Establece el valor inicial de la señal
-    const initialTheme = stored ?? (prefersDark ? 'dark' : 'light');
+
+    const initialTheme: Theme = stored ?? (prefersDark ? 'dark' : 'light');
     this.theme.set(initialTheme);
-    
-    // 2. Aplicar la clase al inicializar, utilizando el mismo patrón que la lógica de toggle
     this.applyThemeClass(initialTheme);
+  }
+
+  // === Getters para rol / usuario ===
+
+  get role(): string {
+    // currentRole() NUNCA devuelve null, así que aquí siempre es string
+    return this.auth.currentRole() || '';
+  }
+
+  get isAdmin(): boolean {
+    return this.role === 'admin';
+  }
+
+  get username(): string {
+    return this.auth.currentUsername();
   }
 
   isAuthRoute(): boolean {
     return location.pathname.startsWith('/auth/');
   }
 
-  // LÓGICA MODIFICADA PARA QUE FUNCIONE EL MODO NOCHE
+  // LÓGICA PARA MODO NOCHE
   toggleTheme(): void {
-    const next = this.theme() === 'dark' ? 'light' : 'dark';
+    const next: Theme = this.theme() === 'dark' ? 'light' : 'dark';
     this.theme.set(next);
     localStorage.setItem('theme', next);
-
-    // LLAMA A LA FUNCIÓN PARA APLICAR LAS CLASES AL BODY
     this.applyThemeClass(next);
   }
 
-  // Función auxiliar para aplicar o remover la clase 'dark-mode'
   private applyThemeClass(currentTheme: Theme): void {
     if (currentTheme === 'dark') {
-        // Agrega la clase 'dark-mode' al BODY, donde aplicamos los estilos
-        document.body.classList.add('dark-mode');
+      document.body.classList.add('dark-mode');
     } else {
-        // Remueve la clase 'dark-mode'
-        document.body.classList.remove('dark-mode');
+      document.body.classList.remove('dark-mode');
     }
   }
 
   logout(): void {
     this.auth.logout();
+    this.router.navigateByUrl('/auth/login');
   }
 }

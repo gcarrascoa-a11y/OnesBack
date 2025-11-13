@@ -1,33 +1,52 @@
 import { Injectable } from '@angular/core';
 
-type Role = 'admin' | 'user';
-type User = { username: string; role: Role } | null;
+export type Role = 'admin' | 'user';
+
+export interface User {
+  username: string;
+  role: Role;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _user: User = JSON.parse(localStorage.getItem('user') || 'null');
+  // User actual (o null si no hay sesión)
+  private _user: User | null = JSON.parse(localStorage.getItem('user') || 'null');
 
+  /**
+   * Login de prueba:
+   *  - admin / admin -> admin
+   *  - user  / user  -> user
+   */
   login(username: string, password: string): boolean {
+    let user: User | null = null;
+
     if (username === 'admin' && password === 'admin') {
-      this._user = { username, role: 'admin' };
+      user = { username: 'admin', role: 'admin' };
     } else if (username === 'user' && password === 'user') {
-      this._user = { username, role: 'user' };
+      user = { username: 'user', role: 'user' };
     } else {
       return false;
     }
-    localStorage.setItem('user', JSON.stringify(this._user));
+
+    this._user = user;
+    localStorage.setItem('user', JSON.stringify(user));
     return true;
   }
 
-  logout() {
-    localStorage.removeItem('role');
+  logout(): void {
+    this._user = null;
+    localStorage.removeItem('user');
   }
 
   isLoggedIn(): boolean {
-    return !!this._user;
+    return this._user !== null;
   }
 
   currentRole(): Role | '' {
-    return this._user?.role ?? '';
+    return this._user ? this._user.role : '';
+  }
+
+  currentUsername(): string {
+    return this._user ? this._user.username : '';
   }
 }
