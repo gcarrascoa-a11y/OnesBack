@@ -1,53 +1,116 @@
-<div class="container my-4">
-  <h4 class="mb-4">Resumen de Inventario</h4>
+<div class="reportes-page">
+  <!-- Encabezado + botón PDF -->
+  <div class="header-row">
+    <div>
+      <h1 class="titulo">Reportes de Inventario</h1>
+      <p class="subtitulo">
+        Resumen visual del inventario y generación de reporte mensual en PDF.
+      </p>
+    </div>
+    <button type="button" class="btn btn-dark btn-pdf" (click)="generarPdf()">
+      <i class="fas fa-file-pdf mr-1"></i>
+      Descargar reporte PDF
+    </button>
+  </div>
 
-  <div class="row">
-    <!-- Total productos -->
-    <div class="col-md-3 mb-3">
-      <div class="card kpi-card shadow-sm">
-        <div class="card-body">
-          <div class="kpi-title">Total Productos</div>
-          <div class="kpi-value">{{ totalProductos }}</div>
-          <div class="kpi-subtitle">Tipos diferentes</div>
-        </div>
-      </div>
+  <!-- Tarjetas resumen (similar Figma) -->
+  <div class="cards-grid">
+    <div class="resumen-card">
+      <div class="resumen-label">Total Productos</div>
+      <div class="resumen-value">{{ totalProductos }}</div>
+      <div class="resumen-caption">Tipos diferentes</div>
     </div>
 
-    <!-- Valor total inventario -->
-    <div class="col-md-3 mb-3">
-      <div class="card kpi-card shadow-sm">
-        <div class="card-body">
-          <div class="kpi-title">Valor Total Inventario</div>
-          <div class="kpi-value">
-            {{ valorTotalInventario | currency:'CLP':'symbol':'1.0-0' }}
+    <div class="resumen-card">
+      <div class="resumen-label">Valor Total Inventario</div>
+      <div class="resumen-value">
+        CLP{{ valorTotal | number : '1.0-0' : 'es-CL' }}
+      </div>
+      <div class="resumen-caption">Valor en stock</div>
+    </div>
+
+    <div class="resumen-card">
+      <div class="resumen-label">Cantidad Total</div>
+      <div class="resumen-value">{{ totalUnidades }}</div>
+      <div class="resumen-caption">Unidades en stock</div>
+    </div>
+
+    <div class="resumen-card">
+      <div class="resumen-label">Precio Promedio</div>
+      <div class="resumen-value">
+        CLP{{ precioPromedio | number : '1.0-0' : 'es-CL' }}
+      </div>
+      <div class="resumen-caption">Por producto</div>
+    </div>
+  </div>
+
+  <!-- "Gráficos" dinámicos sin librerías, pero vistosos -->
+  <div class="charts-grid">
+    <!-- Cantidad por categoría -->
+    <div class="chart-card">
+      <h2 class="chart-title">Cantidad de Stock por Categoría</h2>
+      <p class="chart-subtitle">
+        Distribución de unidades disponibles por tipo de flor.
+      </p>
+
+      <div *ngIf="resumenCategorias.length > 0; else noCategorias">
+        <div
+          class="bar-row"
+          *ngFor="let c of resumenCategorias"
+        >
+          <div class="bar-label">{{ c.categoria }}</div>
+          <div class="bar-track">
+            <div
+              class="bar-fill"
+              [style.width.%]="
+                maxCantidadCategoria > 0
+                  ? (c.cantidad / maxCantidadCategoria) * 100
+                  : 0
+              "
+            ></div>
           </div>
-          <div class="kpi-subtitle">Valor en stock</div>
+          <div class="bar-value">{{ c.cantidad }}</div>
         </div>
       </div>
+
+      <ng-template #noCategorias>
+        <p class="text-muted mt-3">
+          No hay datos suficientes para mostrar la distribución por categoría.
+        </p>
+      </ng-template>
     </div>
 
-    <!-- Cantidad total -->
-    <div class="col-md-3 mb-3">
-      <div class="card kpi-card shadow-sm">
-        <div class="card-body">
-          <div class="kpi-title">Cantidad Total</div>
-          <div class="kpi-value">{{ cantidadTotal }}</div>
-          <div class="kpi-subtitle">Unidades en stock</div>
-        </div>
-      </div>
-    </div>
+    <!-- Valor por estado -->
+    <div class="chart-card">
+      <h2 class="chart-title">Valor del Inventario por Estado</h2>
+      <p class="chart-subtitle">
+        Distribución del valor total según disponibilidad de stock.
+      </p>
 
-    <!-- Precio promedio -->
-    <div class="col-md-3 mb-3">
-      <div class="card kpi-card shadow-sm">
-        <div class="card-body">
-          <div class="kpi-title">Precio Promedio</div>
-          <div class="kpi-value">
-            {{ precioPromedio | currency:'CLP':'symbol':'1.0-0' }}
-          </div>
-          <div class="kpi-subtitle">Por producto</div>
+      <div class="estado-legend">
+        <span class="estado-dot disponible"></span> Disponible:
+        {{ estadoPorcentaje.disponible }}%
+        <span class="estado-dot bajo ml-3"></span> Stock Bajo:
+        {{ estadoPorcentaje.bajo }}%
+        <span class="estado-dot agotado ml-3"></span> Agotados:
+        {{ estadoPorcentaje.agotado }}%
+      </div>
+
+      <div class="estado-bars">
+        <div class="estado-bar disponible"
+             [style.width.%]="estadoPorcentaje.disponible || 0">
+        </div>
+        <div class="estado-bar bajo"
+             [style.width.%]="estadoPorcentaje.bajo || 0">
+        </div>
+        <div class="estado-bar agotado"
+             [style.width.%]="estadoPorcentaje.agotado || 0">
         </div>
       </div>
+
+      <p class="chart-footer text-muted">
+        El largo de cada barra representa el porcentaje del valor total del inventario.
+      </p>
     </div>
   </div>
 </div>
