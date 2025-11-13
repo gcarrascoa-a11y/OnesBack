@@ -1,17 +1,37 @@
+.small-box-fixed {
+  width: 100%;           /* antes tenía un width fijo; ahora llena la columna */
+  max-width: 100%;
+}
 
-/* Dashboard tuned for black brand */
-.container-fluid { background: var(--surface); }
-.brand .subnav .subnav-link { color: var(--muted); font-weight: 600; }
-.brand .subnav .subnav-link.active,
-.brand .subnav .subnav-link:hover { color: var(--brand); }
-.card { border-radius: 18px; }
-.btn-primary-soft {
-  color: var(--brand);
-  background: rgba(0,0,0,.08);
-  border: 1px solid rgba(0,0,0,.18);
+.small-box-fixed .inner {
+  padding: 18px 20px;    /* ligeramente más cómodo en cajas grandes */
 }
-:root[data-theme="dark"] .btn-primary-soft {
-  color: #fff; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18);
+
+.small-box-fixed h3 {
+  font-size: 1.85rem;
+  margin: 0 0 .25rem;
+  line-height: 1.2;
 }
-.btn-primary-soft:hover { background: rgba(0,0,0,.12); }
-.empty { padding: 1.25rem; color: var(--muted); }
+
+.small-box-fixed p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.small-box-fixed .small-box-footer {
+  padding: .6rem 1rem;
+  font-size: .95rem;
+}
+
+.small-box-fixed .icon {
+  font-size: 60px;
+  top: 10px;
+  right: 16px;
+  opacity: .12;
+}
+
+/* En móvil, cada caja ocupa toda la fila (col-12 ya lo hace) */
+@media (max-width: 576px) {
+  .small-box-fixed { width: 100%; }
+}
+

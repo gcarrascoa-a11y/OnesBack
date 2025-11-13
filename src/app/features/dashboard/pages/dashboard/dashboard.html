@@ -1,88 +1,40 @@
-<div class="content-header" style="padding-top: 0 !important; padding-bottom: 0.5rem !important;"> 
-    <div class="container-fluid">
-        <div class="row mb-1">
-            <div class="col-sm-12">
-                <h1 class="m-0" style="margin-bottom: 0.5rem !important;">Panel de Control General</h1> 
-            </div>
+<div class="content" style="padding-top:0!important;">
+  <div class="container">
+    <div class="row">
+      <!-- Caja 1: Agregar Productos -->
+      <div class="col-12 col-md-6 mb-3">
+        <div class="small-box bg-info small-box-compact small-box-fixed">
+          <div class="inner">
+            <h3>+</h3>
+            <p>Agregar Productos</p>
+          </div>
+          <div class="icon"><i class="fas fa-plus-square"></i></div>
+          <a routerLink="/inventario/agregar" class="small-box-footer">
+            Registrar Producto <i class="fas fa-arrow-circle-right"></i>
+          </a>
         </div>
+      </div>
+
+      <!-- Caja 2: Stock Total -->
+      <div class="col-12 col-md-6 mb-3">
+        <div class="small-box bg-success small-box-compact small-box-fixed">
+          <div class="inner">
+            <h3>15.890</h3>
+            <p>Stock Total (Unidades)</p>
+          </div>
+          <div class="icon"><i class="fas fa-warehouse"></i></div>
+          <a routerLink="/inventario/resumen" class="small-box-footer">
+            Ver Resumen <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
     </div>
+
+    <!-- Tarjeta de última actualización -->
+    <div class="card mt-2">
+      <div class="card-body">
+        <strong>Última Actualización del Inventario:</strong>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="content" style="padding-top: 0 !important;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3 class="display-4">525</h3>
-                        <p>Productos Registrados</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <a [routerLink]="['/inventario/productos-lista']" class="small-box-footer">
-                        Ver Lista <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3 class="display-4">15.890</h3>
-                        <p>Stock Total (Unidades)</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-warehouse"></i>
-                    </div>
-                    <a [routerLink]="['/inventario/resumen']" class="small-box-footer">
-                        Ver Resumen <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3 class="display-4">15</h3>
-                        <p>Productos con Stock Bajo</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <a [routerLink]="['/inventario/stock-bajo']" class="small-box-footer">
-                        Revisar ahora <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3 class="display-4">8</h3>
-                        <p>Productos Agotados</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-times-circle"></i>
-                    </div>
-                    <a [routerLink]="['/inventario/agotados']" class="small-box-footer">
-                        Solicitar Compra <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-muted text-sm m-0">
-                            <strong>Última Actualización del Inventario:</strong> 
-                            <span class="text-primary">{{ lastUpdateDate | date: 'dd/MM/yyyy HH:mm' }}</span> 
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>

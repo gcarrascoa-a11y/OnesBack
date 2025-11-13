@@ -1,72 +1,55 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-  <div class="container">
-    <a class="navbar-brand" routerLink="/">FloriCoop</a>
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">FloriCoop</a>
 
-    <ul class="navbar-nav ml-3" *ngIf="!isAuthRoute()">
-      <li class="nav-item">
-            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
-                <i class="fas fa-home mr-1"></i>Inicio
-            </a>
-        </li>
-        
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                <i class="fas fa-boxes mr-1"></i>Inventario
-            </a>
-            <div class="dropdown-menu dropdown-menu-left">
-                <a [routerLink]="['/inventario/productos-lista']" class="dropdown-item">
-                    <i class="fas fa-list-ul mr-2"></i>Lista de Productos
-                </a>
-                <div class="dropdown-divider"></div>
-                <a [routerLink]="['/inventario/resumen']" class="dropdown-item">
-                    <i class="fas fa-chart-pie mr-2"></i>Resumen General
-                </a>
-                <a [routerLink]="['/inventario/stock-bajo']" class="dropdown-item text-warning">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>Productos con Stock Bajo
-                </a>
-                <a [routerLink]="['/inventario/agotados']" class="dropdown-item text-danger">
-                    <i class="fas fa-times-circle mr-2"></i>Productos Agotados
-                </a>
-            </div>
-        </li>
-              <li class="nav-item"><a routerLink="/usuarios"   routerLinkActive="active" class="nav-link">
-            <i class="fas fa-users mr-1"></i>Usuarios
-        </a></li>
-      <li class="nav-item"><a routerLink="/reportes/crear" routerLinkActive="active" class="nav-link">
-            <i class="fas fa-chart-line mr-1"></i>Reportes
-        </a></li>
-    </ul>
+    <ul class="navbar-nav ml-3" *ngIf="!isAuthRoute()">
+      <li class="nav-item">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-home mr-1"></i>Inicio
+        </a>
+      </li>
 
-    <ul class="navbar-nav ml-auto align-items-center" *ngIf="!isAuthRoute()">
-      <li class="nav-item mr-2">
-        <button class="theme-toggle btn btn-sm" (click)="toggleTheme()" [attr.aria-label]="theme() === 'dark' ? 'Cambiar a claro' : 'Cambiar a oscuro'">
-          <ng-container *ngIf="theme() === 'dark'; else sunTpl">🌙</ng-container>
-          <ng-template #sunTpl>☀️</ng-template>
-        </button>
-      </li>
-      <li class="nav-item mr-2">
-        <span class="badge badge-info p-2">Rol: {{ auth.currentRole() || '—' }}</span>
-      </li>
-      <li class="nav-item">
-        <button class="btn btn-sm btn-outline-dark" (click)="logout()">
-          <i class="fas fa-sign-out-alt mr-1"></i>Salir
-        </button>
-      </li>
-    </ul>
-  </div>
+      <!-- Inventario eliminado -->
+
+      <li class="nav-item">
+        <a routerLink="/usuarios" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-users mr-1"></i>Usuarios
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a routerLink="/reportes/crear" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-chart-line mr-1"></i>Reportes
+        </a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto align-items-center" *ngIf="!isAuthRoute()">
+      <li class="nav-item mr-2">
+        <button class="theme-toggle btn btn-sm" (click)="toggleTheme()" [attr.aria-label]="theme() === 'dark' ? 'Cambiar a claro' : 'Cambiar a oscuro'">
+          <ng-container *ngIf="theme() === 'dark'; else sunTpl">🌙</ng-container>
+          <ng-template #sunTpl>☀️</ng-template>
+        </button>
+      </li>
+      <li class="nav-item mr-2">
+        <span class="badge badge-info p-2">Rol: {{ auth.currentRole() || '—' }}</span>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-sm btn-outline-dark" (click)="logout()">
+          <i class="fas fa-sign-out-alt mr-1"></i>Salir
+        </button>
+      </li>
+    </ul>
+  </div>
 </nav>
 
 <div class="content-wrapper">
-  <div class="content">
-    <div class="container py-4">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+  <router-outlet></router-outlet>
 </div>
 
 <footer class="main-footer small text-muted">
-  <div class="container d-flex justify-content-between">
-    <span>© {{ currentYear }} FloriCoop</span>
-    <span>@ONESBACK</span>
-  </div>
+  <div class="container d-flex justify-content-between">
+    <span>© {{ currentYear }} FloriCoop</span>
+    <span>@ONESBACK</span>
+  </div>
 </footer>

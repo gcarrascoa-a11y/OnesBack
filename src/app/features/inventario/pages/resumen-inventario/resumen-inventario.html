@@ -1,24 +1,37 @@
 <div class="container my-3">
-  <div class="card shadow-sm mb-3">
+  <div class="card resumen-card shadow-sm mb-4">
     <div class="card-body">
-      <!-- Filtros -->
-      <div class="btn-toolbar mb-3 gap-2">
-        <button class="pill" [class.active]="filtro==='todos'" (click)="filtro='todos'">
-          <i class="fas fa-layer-group mr-1"></i> Todos
-          <span class="pill-badge">{{ total }}</span>
+
+      <!-- Chips de filtro -->
+      <div class="filter-bar mb-3 d-flex align-items-center flex-wrap gap-2">
+        <button class="chip" [class.active]="filtro === 'todos'" (click)="setFiltro('todos')">
+          <i class="fas fa-layer-group mr-2"></i>
+          <div class="chip-label">Todos</div>
+          <div class="chip-count">{{ total }}</div>
         </button>
-        <button class="pill" [class.active]="filtro==='disponibles'" (click)="filtro='disponibles'">
-          <i class="fas fa-check-circle mr-1"></i> Disponibles
-          <span class="pill-badge">{{ enStock }}</span>
+
+        <button class="chip" [class.active]="filtro === 'disponibles'" (click)="setFiltro('disponibles')">
+          <i class="fas fa-check-circle mr-2"></i>
+          <div class="chip-label">Disponibles</div>
+          <div class="chip-count">{{ disponibles }}</div>
         </button>
-        <button class="pill" [class.active]="filtro==='bajo'" (click)="filtro='bajo'">
-          <i class="fas fa-exclamation-triangle mr-1"></i> Stock Bajo
-          <span class="pill-badge">{{ bajos }}</span>
+
+        <button class="chip" [class.active]="filtro === 'bajo'" (click)="setFiltro('bajo')">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          <div class="chip-label">Stock Bajo</div>
+          <div class="chip-count">{{ bajos }}</div>
         </button>
-        <button class="pill" [class.active]="filtro==='agotados'" (click)="filtro='agotados'">
-          <i class="fas fa-times-circle mr-1"></i> Agotados
-          <span class="pill-badge">{{ agotados }}</span>
+
+        <button class="chip" [class.active]="filtro === 'agotados'" (click)="setFiltro('agotados')">
+          <i class="fas fa-times-circle mr-2"></i>
+          <div class="chip-label">Agotados</div>
+          <div class="chip-count">{{ agotados }}</div>
         </button>
+      </div>
+
+      <!-- Etiqueta de filtro -->
+      <div class="text-muted mb-2">
+        Mostrando: <strong>{{ filtroEtiqueta }}</strong>
       </div>
 
       <!-- Tabla -->
@@ -35,7 +48,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let p of lista; trackBy: trackById">
+            <tr *ngFor="let p of listaFiltrada; trackBy: trackById">
               <td>{{ p.nombre }}</td>
               <td>{{ p.categoria || '—' }}</td>
               <td class="text-right pr-3">{{ p.stock }}</td>
@@ -47,8 +60,7 @@
                 </button>
               </td>
             </tr>
-
-            <tr *ngIf="lista.length === 0">
+            <tr *ngIf="listaFiltrada.length === 0">
               <td colspan="6" class="text-center text-muted py-4">No hay productos para este filtro.</td>
             </tr>
           </tbody>
@@ -57,8 +69,8 @@
     </div>
   </div>
 
-  <!-- Stats -->
-  <div class="card shadow-sm">
+  <!-- Estadísticas -->
+  <div class="card shadow-sm stats-card">
     <div class="card-body">
       <div class="row">
         <div class="col-sm-6 col-lg-3 mb-3 mb-lg-0">
@@ -90,26 +102,19 @@
   </div>
 </div>
 
-<!-- ================= MODAL (ÚNICO FORM) ================= -->
-<div *ngIf="isOpen"
-     class="modal-root"
-     tabindex="0"
-     (keydown.escape)="closeModal()"
-     aria-labelledby="editarProductoTitulo"
-     role="dialog"
-     aria-modal="true">
-  <div class="modal-mask" aria-hidden="true" (click)="closeModal()"></div>
-
+<!-- Modal (sin jQuery) -->
+<div *ngIf="isOpen">
+  <div class="modal-mask" (click)="closeModal()"></div>
   <div class="modal-sheet" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h6 id="editarProductoTitulo" class="mb-0">Editar Producto</h6>
-      <button type="button" class="close" aria-label="Cerrar" (click)="closeModal()">×</button>
+      <h6 class="mb-0">Editar Producto</h6>
+      <button type="button" class="close" (click)="closeModal()">×</button>
     </div>
 
     <form class="p-3" [formGroup]="form" (ngSubmit)="save()">
       <div class="form-group">
         <label>Nombre (No editable)</label>
-        <input class="form-control" formControlName="nombre" />
+        <input class="form-control" formControlName="nombre" [readonly]="true"/>
       </div>
 
       <div class="form-group">
@@ -120,7 +125,7 @@
       <div class="form-row">
         <div class="form-group col-sm-6">
           <label>Cantidad</label>
-          <input type="number" class="form-control" formControlName="cantidad" />
+          <input type="number" class="form-control" formControlName="stock" />
         </div>
         <div class="form-group col-sm-6">
           <label>Precio (CLP)</label>

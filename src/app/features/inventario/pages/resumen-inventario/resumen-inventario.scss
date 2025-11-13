@@ -1,0 +1,49 @@
+/* Chips de filtro */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .55rem .8rem;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: .75rem;
+  background: #fff;
+  cursor: pointer;
+  transition: all .15s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.chip .chip-label {
+  font-weight: 600;
+  font-size: .92rem;
+}
+
+.chip .chip-count {
+  background: #f5f5f5;
+  border-radius: .5rem;
+  padding: .1rem .45rem;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+
+.chip.active {
+  background: #111827;
+  color: #fff;
+  border-color: transparent;
+}
+
+.chip.active .chip-count {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+}
