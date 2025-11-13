@@ -9,7 +9,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // User actual (o null si no hay sesión)
+  // Usuario actual (o null si no hay sesión)
   private _user: User | null = JSON.parse(localStorage.getItem('user') || 'null');
 
   /**

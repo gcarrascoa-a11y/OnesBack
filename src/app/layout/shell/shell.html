@@ -10,9 +10,7 @@
         </a>
       </li>
 
-      <!-- Inventario eliminado -->
-
-      <!-- Solo los administradores ven este menú -->
+      <!-- Usuarios solo visible para admin -->
       <li class="nav-item" *ngIf="isAdmin">
         <a routerLink="/usuarios" routerLinkActive="active" class="nav-link">
           <i class="fas fa-users mr-1"></i>Usuarios
@@ -39,14 +37,12 @@
         </button>
       </li>
 
-      <!-- Nombre de usuario (si existe) -->
       <li class="nav-item mr-2" *ngIf="username">
         <span class="badge badge-light p-2">
           <i class="fas fa-user mr-1"></i>{{ username }}
         </span>
       </li>
 
-      <!-- Rol actual -->
       <li class="nav-item mr-2">
         <span class="badge badge-info p-2">
           Rol:

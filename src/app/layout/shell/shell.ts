@@ -4,7 +4,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { Router } from '@angular/router';
 
-// Tipo para mayor claridad
 type Theme = 'light' | 'dark';
 
 @Component({
@@ -15,15 +14,13 @@ type Theme = 'light' | 'dark';
   styleUrls: ['./shell.scss'],
 })
 export class ShellComponent {
-  // Inicialización usando Signals
   theme = signal<Theme>('light');
   readonly currentYear = new Date().getFullYear();
 
   constructor(
-    public auth: AuthService,   // público para usarlo en la template
+    public auth: AuthService,
     private router: Router
   ) {
-    // 1. Inicializar el tema desde localStorage o preferencias del sistema
     const stored = localStorage.getItem('theme') as Theme | null;
     const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -32,10 +29,8 @@ export class ShellComponent {
     this.applyThemeClass(initialTheme);
   }
 
-  // === Getters para rol / usuario ===
-
+  // === helpers de rol/usuario ===
   get role(): string {
-    // currentRole() NUNCA devuelve null, así que aquí siempre es string
     return this.auth.currentRole() || '';
   }
 
@@ -51,7 +46,6 @@ export class ShellComponent {
     return location.pathname.startsWith('/auth/');
   }
 
-  // LÓGICA PARA MODO NOCHE
   toggleTheme(): void {
     const next: Theme = this.theme() === 'dark' ? 'light' : 'dark';
     this.theme.set(next);

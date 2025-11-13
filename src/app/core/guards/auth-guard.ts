@@ -9,6 +9,5 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  // Si no está logueado, lo mandamos al login
   return inject(Router).parseUrl('/auth/login');
 };

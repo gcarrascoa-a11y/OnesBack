@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InventarioService, Producto } from '../../../../core/services/inventario';
+import { RouterModule } from '@angular/router';
 
 type Filtro = 'todos' | 'disponibles' | 'bajo' | 'agotados';
 
 @Component({
   selector: 'app-resumen-inventario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './resumen-inventario.html',
   styleUrls: ['./resumen-inventario.scss'],
 })
@@ -25,7 +26,6 @@ export class ResumenInventarioComponent implements OnInit {
     this.productos = this.inventario.all();
   }
 
-  // Productos filtrados según el botón seleccionado
   get productosFiltrados(): Producto[] {
     switch (this.filtro) {
       case 'disponibles':
@@ -40,7 +40,6 @@ export class ResumenInventarioComponent implements OnInit {
     }
   }
 
-  // Totales para la tarjeta de abajo
   get totalProductos(): number {
     return this.productos.length;
   }
@@ -57,22 +56,16 @@ export class ResumenInventarioComponent implements OnInit {
     return this.productos.filter(p => p.stock === 0).length;
   }
 
-  cambiarFiltro(filtro: Filtro): void {
-    this.filtro = filtro;
+  cambiarFiltro(f: Filtro): void {
+    this.filtro = f;
   }
-
-  // === ACCIONES ===
 
   editarProducto(prod: Producto): void {
     const nuevoNombre = prompt('Nuevo nombre del producto:', prod.nombre);
-    if (nuevoNombre === null || nuevoNombre.trim() === '') {
-      return;
-    }
+    if (!nuevoNombre || !nuevoNombre.trim()) return;
 
     const nuevoStockStr = prompt('Nueva cantidad en stock:', String(prod.stock));
-    if (nuevoStockStr === null) {
-      return;
-    }
+    if (nuevoStockStr === null) return;
 
     const nuevoStock = Number(nuevoStockStr);
     if (Number.isNaN(nuevoStock) || nuevoStock < 0) {
@@ -80,7 +73,6 @@ export class ResumenInventarioComponent implements OnInit {
       return;
     }
 
-    // Usamos los métodos del servicio
     this.inventario.rename(prod.id, nuevoNombre.trim());
     this.inventario.setStock(prod.id, nuevoStock);
     this.refrescar();

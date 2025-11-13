@@ -5,11 +5,10 @@ import { AuthService } from '../services/auth';
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
 
-  // Solo permite pasar si el rol es admin
   if (auth.currentRole() === 'admin') {
     return true;
   }
 
-  // Si NO es admin, lo mandamos al dashboard (o donde quieras)
+  // Si no es admin, lo mandamos al dashboard
   return inject(Router).parseUrl('/dashboard');
 };

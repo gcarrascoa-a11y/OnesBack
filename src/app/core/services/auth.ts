@@ -1,36 +1,51 @@
-import { Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+
+export type Role = 'admin' | 'user';
+
+export interface User {
+  username: string;
+  role: Role;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  currentUsername(): string {
-    throw new Error('Method not implemented.');
-  }
-  private role = signal<string | null>(null);
+  private _user: User | null = JSON.parse(localStorage.getItem('user') || 'null');
 
-  constructor(private router: Router) {}
+  /**
+   * Usuarios de prueba:
+   *  - admin / admin -> admin
+   *  - user  / user  -> user
+   */
+  login(username: string, password: string): boolean {
+    let user: User | null = null;
 
-  currentRole() { return this.role(); }
-
-  login(username: string, password: string) {
-    // Demo simple
     if (username === 'admin' && password === 'admin') {
-      this.role.set('admin');
-      this.router.navigateByUrl('/dashboard');
-      return true;
+      user = { username: 'admin', role: 'admin' };
+    } else if (username === 'user' && password === 'user') {
+      user = { username: 'user', role: 'user' };
+    } else {
+      return false;
     }
-    if (username === 'user' && password === 'user') {
-      this.role.set('user');
-      this.router.navigateByUrl('/dashboard');
-      return true;
-    }
-    return false;
+
+    this._user = user;
+    localStorage.setItem('user', JSON.stringify(user));
+    return true;
   }
 
-  logout() {
-    this.role.set(null);
-    this.router.navigateByUrl('/auth/login');
+  logout(): void {
+    this._user = null;
+    localStorage.removeItem('user');
   }
 
-  isLoggedIn() { return !!this.role(); }
+  isLoggedIn(): boolean {
+    return this._user !== null;
+  }
+
+  currentRole(): Role | '' {
+    return this._user ? this._user.role : '';
+  }
+
+  currentUsername(): string {
+    return this._user ? this._user.username : '';
+  }
 }

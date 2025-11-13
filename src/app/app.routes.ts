@@ -12,7 +12,7 @@ export const routes: Routes = [
     title: 'Iniciar sesión',
   },
 
-  // App protegida por login
+  // App protegida
   {
     path: '',
     component: ShellComponent,
@@ -71,7 +71,6 @@ export const routes: Routes = [
         title: 'Usuarios',
       },
 
-      // Redirección por defecto dentro del shell
       {
         path: '',
         pathMatch: 'full',
@@ -80,9 +79,5 @@ export const routes: Routes = [
     ],
   },
 
-  // Cualquier otra ruta → raíz (que a su vez manda a dashboard si está logueado)
-  {
-    path: '**',
-    redirectTo: '',
-  },
+  { path: '**', redirectTo: '' },
 ];

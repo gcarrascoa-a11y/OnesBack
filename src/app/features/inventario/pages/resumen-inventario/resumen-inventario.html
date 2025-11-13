@@ -1,43 +1,25 @@
 <div class="inventario-page">
-  <!-- Filtros -->
   <div class="card filtros-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="btn-group" role="group">
-        <button
-          type="button"
-          class="btn filtro-btn"
-          [class.active]="filtro === 'todos'"
-          (click)="cambiarFiltro('todos')"
-        >
+        <button type="button" class="btn filtro-btn" [class.active]="filtro === 'todos'"
+          (click)="cambiarFiltro('todos')">
           <i class="fas fa-layer-group mr-1"></i>Todos
         </button>
-        <button
-          type="button"
-          class="btn filtro-btn"
-          [class.active]="filtro === 'disponibles'"
-          (click)="cambiarFiltro('disponibles')"
-        >
+        <button type="button" class="btn filtro-btn" [class.active]="filtro === 'disponibles'"
+          (click)="cambiarFiltro('disponibles')">
           <i class="fas fa-check-circle mr-1"></i>Disponibles
         </button>
-        <button
-          type="button"
-          class="btn filtro-btn"
-          [class.active]="filtro === 'bajo'"
-          (click)="cambiarFiltro('bajo')"
-        >
+        <button type="button" class="btn filtro-btn" [class.active]="filtro === 'bajo'"
+          (click)="cambiarFiltro('bajo')">
           <i class="fas fa-exclamation-triangle mr-1"></i>Stock Bajo
         </button>
-        <button
-          type="button"
-          class="btn filtro-btn"
-          [class.active]="filtro === 'agotados'"
-          (click)="cambiarFiltro('agotados')"
-        >
+        <button type="button" class="btn filtro-btn" [class.active]="filtro === 'agotados'"
+          (click)="cambiarFiltro('agotados')">
           <i class="fas fa-times-circle mr-1"></i>Agotados
         </button>
       </div>
 
-      <!-- Botón agregar producto -->
       <a routerLink="/inventario/agregar" class="btn btn-sm btn-dark">
         <i class="fas fa-plus mr-1"></i>Agregar producto
       </a>
@@ -58,7 +40,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Filas con productos -->
           <tr *ngFor="let p of productosFiltrados">
             <td>{{ p.nombre }}</td>
             <td>{{ p.categoria || '—' }}</td>
@@ -67,14 +48,12 @@
               {{ p.precio != null ? ('$ ' + p.precio) : '—' }}
             </td>
             <td>
-              <span
-                class="badge"
+              <span class="badge"
                 [ngClass]="{
                   'badge-success': p.stock > (p.min ?? 0),
                   'badge-warning': p.stock > 0 && p.stock <= (p.min ?? 0),
                   'badge-secondary': p.stock === 0
-                }"
-              >
+                }">
                 {{
                   p.stock === 0
                     ? 'Agotado'
@@ -85,25 +64,15 @@
               </span>
             </td>
             <td class="text-right">
-              <!-- ACCIONES -->
-              <button
-                type="button"
-                class="btn btn-sm btn-outline-primary mr-2"
-                (click)="editarProducto(p)"
-              >
+              <button class="btn btn-sm btn-outline-primary mr-2" type="button" (click)="editarProducto(p)">
                 <i class="fas fa-pen mr-1"></i>Editar
               </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-outline-danger"
-                (click)="eliminarProducto(p)"
-              >
+              <button class="btn btn-sm btn-outline-danger" type="button" (click)="eliminarProducto(p)">
                 <i class="fas fa-trash-alt mr-1"></i>Eliminar
               </button>
             </td>
           </tr>
 
-          <!-- Estado vacío para el filtro actual -->
           <tr *ngIf="productosFiltrados.length === 0">
             <td colspan="6" class="text-center text-muted py-4">
               No hay productos para este filtro.
@@ -118,7 +87,6 @@
     </div>
   </div>
 
-  <!-- Resumen inferior -->
   <div class="card resumen-card mt-3">
     <div class="row text-center">
       <div class="col">
