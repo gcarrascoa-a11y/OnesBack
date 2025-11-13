@@ -1,0 +1,53 @@
+<div class="container my-4">
+  <h4 class="mb-4">Resumen de Inventario</h4>
+
+  <div class="row">
+    <!-- Total productos -->
+    <div class="col-md-3 mb-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="kpi-title">Total Productos</div>
+          <div class="kpi-value">{{ totalProductos }}</div>
+          <div class="kpi-subtitle">Tipos diferentes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Valor total inventario -->
+    <div class="col-md-3 mb-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="kpi-title">Valor Total Inventario</div>
+          <div class="kpi-value">
+            {{ valorTotalInventario | currency:'CLP':'symbol':'1.0-0' }}
+          </div>
+          <div class="kpi-subtitle">Valor en stock</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cantidad total -->
+    <div class="col-md-3 mb-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="kpi-title">Cantidad Total</div>
+          <div class="kpi-value">{{ cantidadTotal }}</div>
+          <div class="kpi-subtitle">Unidades en stock</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Precio promedio -->
+    <div class="col-md-3 mb-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="kpi-title">Precio Promedio</div>
+          <div class="kpi-value">
+            {{ precioPromedio | currency:'CLP':'symbol':'1.0-0' }}
+          </div>
+          <div class="kpi-subtitle">Por producto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

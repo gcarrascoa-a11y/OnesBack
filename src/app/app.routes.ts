@@ -29,14 +29,11 @@ export const routes: Routes = [
       {
         path: 'inventario',
         children: [
-          // índice: /inventario  -> va al resumen
           {
             path: '',
             pathMatch: 'full',
             redirectTo: 'resumen',
           },
-
-          // /inventario/resumen  (vista principal: tabla + KPIs + modal de edición)
           {
             path: 'resumen',
             loadComponent: () =>
@@ -44,8 +41,6 @@ export const routes: Routes = [
                 .then(m => m.ResumenInventarioComponent),
             title: 'Resumen de inventario',
           },
-
-          // /inventario/agregar
           {
             path: 'agregar',
             loadComponent: () =>
@@ -56,6 +51,15 @@ export const routes: Routes = [
         ],
       },
 
+      // REPORTES
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./features/reportes/pages/reportes-resumen/reportes-resumen')
+            .then(m => m.ReportesResumenComponent),
+        title: 'Reportes',
+      },
+
       {
         path: 'usuarios',
         loadComponent: () =>
@@ -64,11 +68,9 @@ export const routes: Routes = [
         title: 'Usuarios',
       },
 
-      // por defecto dentro del shell
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
     ],
   },
 
-  // cualquier otra ruta
   { path: '**', redirectTo: '' },
 ];
